@@ -59,6 +59,7 @@ fun PantallaUsuario(onCerrarSesion: () -> Unit = {}) {
 
         //botón para cerrar sesión
         CerrarSesion(onClick = onCerrarSesion)
+        Spacer(modifier = Modifier.height(30.dp))
     }
 }
 
