@@ -26,12 +26,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.*
 
 //colores
 val colorBordeSuave = Color(0xFFE2E8F0)
 val colorOscuro = Color(0xFF152530)
 val colorTextoGris = Color(0xFF8A949E)
 val colorVerdeTexto = Color(0xFFC8E6C9)
+
+val colorNaranja = Color(0xFFE8632B)
+
+
+
 
 @Composable
 fun Encabezado(titulo: String) {
@@ -168,7 +174,12 @@ fun TarjetaTemperatura(){
 }
 
 @Composable
-fun ControlRapido(){
+fun ControlRapido() {
+
+    // Estados para controlar si están activas
+    var alarmaEncendida by remember { mutableStateOf(false) }
+    var compuertasAbiertas by remember { mutableStateOf(false) }
+
     Text(
         text = "Control rápido",
         fontSize = 17.sp,
@@ -184,44 +195,40 @@ fun ControlRapido(){
     ) {
         // Botón Alarma
         Surface(
-            color = Color.White,
+            onClick = { alarmaEncendida = !alarmaEncendida },
+            color = if (alarmaEncendida) colorNaranja else Color.White,
             shape = RoundedCornerShape(20.dp),
-            border = BorderStroke(1.dp, colorBordeSuave),
+            border = BorderStroke(1.dp, if (alarmaEncendida) colorNaranja else colorBordeSuave),
             modifier = Modifier.weight(1f)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Image(
                     painter = painterResource(id = R.drawable.alerta),
-                    contentDescription = "Compuertas",
+                    contentDescription = "Alarma",
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.height(14.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Alarma",
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colorOscuro
-                    )
-                }
+                Text(
+                    text = "Alarma",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (alarmaEncendida) Color.White else colorOscuro
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Apagada",
+                    text = if (alarmaEncendida) "Encendida, presione para apagar" else "Apagada",
                     fontSize = 12.sp,
-                    color = colorTextoGris
+                    color = if (alarmaEncendida) Color(0xFFFFE0D3) else colorTextoGris
                 )
             }
         }
 
-        // Botón Compuertas
+        // Botón Compuertas (también cambia a naranja al tocarlo)
         Surface(
-            color = Color.White,
+            onClick = { compuertasAbiertas = !compuertasAbiertas },
+            color = if (compuertasAbiertas) colorNaranja else Color.White,
             shape = RoundedCornerShape(20.dp),
-            border = BorderStroke(1.dp, colorBordeSuave),
+            border = BorderStroke(1.dp, if (compuertasAbiertas) colorNaranja else colorBordeSuave),
             modifier = Modifier.weight(1f)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -231,30 +238,22 @@ fun ControlRapido(){
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.height(14.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "compuertas",
-                        fontSize = 17.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = colorOscuro
-                    )
-
-                }
+                Text(
+                    text = "compuertas",
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = if (compuertasAbiertas) Color.White else colorOscuro
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Cerradas",
+                    text = if (compuertasAbiertas) "Abiertas, presione para cerrar" else "Cerradas",
                     fontSize = 12.sp,
-                    color = colorTextoGris
+                    color = if (compuertasAbiertas) Color(0xFFFFE0D3) else colorTextoGris
                 )
             }
         }
     }
 }
-
 @Composable
 fun EstadoSistema(){
     Text(

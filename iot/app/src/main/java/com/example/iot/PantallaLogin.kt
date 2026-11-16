@@ -15,9 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun PantallaLogin(onLoginExitoso: (String)-> Unit){
@@ -31,6 +31,8 @@ fun PantallaLogin(onLoginExitoso: (String)-> Unit){
     var correo by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("")}
     var mensajeError by rememberSaveable{mutableStateOf("")}
+    val context = LocalContext.current
+    val dbHelper = remember { DatabaseHelper(context) }
 
     Column(
         modifier = Modifier
@@ -160,12 +162,7 @@ fun PantallaLogin(onLoginExitoso: (String)-> Unit){
 
                 //Evaluacion de 3 cuentas y asignación de rol
 
-                val rolDetectado = when {
-                    correoLimpio == "user@firesafe.com" && passLimpia == "user1234" -> "USUARIO"
-                    correoLimpio == "admin@firesafe.com" && passLimpia == "admin1234" -> "ADMINISTRADOR"
-                    correoLimpio == "system@firesafe.com" && passLimpia == "system1234" -> "SISTEMA"
-                    else -> null
-                }
+                val rolDetectado = dbHelper.validarLogin(correoLimpio, passLimpia)
 
                 //rol detectado
                 if (rolDetectado != null) {
