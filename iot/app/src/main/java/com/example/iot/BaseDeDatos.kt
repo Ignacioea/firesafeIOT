@@ -1,4 +1,4 @@
-package com.example.iot // Asegúrate de que coincida con el paquete de tus otros archivos
+package com.example.iot
 
 import android.content.ContentValues
 import android.content.Context
